@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:florafauna/view/showall.dart';
 import 'package:florafauna/viewmodel/recommendedartical.dart';
 import 'package:florafauna/viewmodel/recommendedartical2.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 List<dynamic> fauna=[]; 
 List scientificName=[];
+bool isloading=true;
    fetchdata() async{
 final response = await http.get(Uri.parse('https://api.gbif.org/v1/occurrence/search?country=GB&country=IE&country=IM'));
 try {
@@ -26,6 +29,7 @@ try {
 setState(() {
   fauna = responsedata["results"];
   scientificName = responsedata["results"];
+  isloading=false;
  
 });
   
@@ -43,9 +47,16 @@ else{
   }
   List<String> image = [
     ('https://img.freepik.com/free-photo/closeup-chital-mudumalai-national-park-india_181624-39465.jpg?ga=GA1.1.78227529.1730639370&semt=ais_hybrid'),
-    ("https://www.pixelstalk.net/wp-content/uploads/images6/Animal-Wallpaper-HD-Free-download.jpg"),
-    ("https://wallpaper.forfun.com/fetch/7d/7d69a914d3d2668f0b2e575319576428.jpeg"),
+('https://images.pexels.com/photos/142497/pexels-photo-142497.jpeg?cs=srgb&dl=pexels-mali-142497.jpg&fm=jpg'),
     ("https://images.pexels.com/photos/45853/grey-crowned-crane-bird-crane-animal-45853.jpeg?cs=srgb&dl=pexels-pixabay-45853.jpg&fm=jpg"),
+    ("https://wallpaper.forfun.com/fetch/7d/7d69a914d3d2668f0b2e575319576428.jpeg"),
+  ];
+
+  List<String> quotes =['The least I can do is speak out for those who cannot speak for themselves',
+  'What we are doing to the forests of the world is but a mirror reflection of what we are doing to ourselves and one another',
+  'The greatness of a nation and its moral progress can be judged by the way its animals are treated.',
+  'Take only pictures, leave only footprints, kill nothing but time.'
+  
   ];
   @override
   void initState() {
@@ -53,6 +64,7 @@ else{
     super.initState();
     image;
     fetchdata();
+    
   }
 
   int currentindex = 0;
@@ -62,7 +74,7 @@ else{
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Padding(
+      body: isloading?Center(child: CircularProgressIndicator(color: Color.fromRGBO(190, 222, 97, 1)),): Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -80,8 +92,23 @@ else{
                       borderRadius: BorderRadius.circular(30),
                       color: const Color.fromARGB(78, 255, 255, 255),
                       image: DecorationImage(
-                          image: NetworkImage(image[currentindex]),
-                          fit: BoxFit.cover)),
+                          image: NetworkImage(image[currentindex],),
+                          fit: BoxFit.cover,opacity: 0.60)),
+               child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Transform.rotate(
+                         angle: 90 * (3.141592653589793 / 180),
+                        child: Icon(Icons.rectangle,size: 35,color: Color.fromRGBO(190, 222, 97, 1))),
+                      Expanded(child: Text(quotes[currentindex],style: TextStyle(color: Colors.white,shadows: [Shadow(color: Colors.black,blurRadius: 40)],overflow: TextOverflow.clip),)),
+                    ],
+                  ),
+                )),
                 ),
               ),
               SizedBox(
@@ -206,7 +233,11 @@ else{
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [Text('Recommended Article',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
-              Text('Show All',style: TextStyle(color: Color.fromRGBO(190, 222, 97,1),fontWeight: FontWeight.w500),)],),
+              GestureDetector(
+                onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Showall()));
+                },
+                child: Text('Show All',style: TextStyle(color: Color.fromRGBO(190, 222, 97,1),fontWeight: FontWeight.w500),))],),
               
               SizedBox(height: 20,),
               SizedBox(
@@ -215,7 +246,7 @@ else{
                 
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 5,
+                  itemCount: fauna.length,
                   itemBuilder: (context, index) {
                   return Container(
                  
@@ -231,8 +262,12 @@ else{
               SizedBox(height: 20,),
                   Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [Text('Recommended Article',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
-              Text('Show All',style: TextStyle(color: Color.fromRGBO(190, 222, 97,1),fontWeight: FontWeight.w500),)],),
+                children: [Text('Explore More',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+              GestureDetector(
+                onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Showall()));
+                },
+                child: Text('Show All',style: TextStyle(color: Color.fromRGBO(190, 222, 97,1),fontWeight: FontWeight.w500),))],),
               
               SizedBox(height: 20,),
         SizedBox(
@@ -241,7 +276,7 @@ else{
                 
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
-                  itemCount: 10,
+                  itemCount: fauna.length,
                   itemBuilder: (context, index) {
                   return Container(
                  
