@@ -14,6 +14,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
       
@@ -108,7 +109,7 @@ class _HomepageState extends State<Homepage> {
                           ),
                           SizedBox(width: 10,),
                           Container(
-                            decoration: BoxDecoration(color: Color.fromRGBO(190, 222, 97,1),borderRadius:BorderRadius.circular(10) ),
+                            decoration: BoxDecoration(color:Colors.green,borderRadius:BorderRadius.circular(10) ),
                             height: 40,width: 40,child: Icon(Icons.arrow_forward_ios,color: Colors.white,shadows: [Shadow(color: Colors.black)],),),
                           
                           ],

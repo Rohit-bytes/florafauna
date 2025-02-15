@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
-
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:florafauna/view/bigarticles.dart';
 import 'package:florafauna/view/showall.dart';
 import 'package:florafauna/viewmodel/recommendedartical.dart';
 import 'package:florafauna/viewmodel/recommendedartical2.dart';
@@ -74,7 +72,7 @@ else{
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: isloading?Center(child: CircularProgressIndicator(color: Color.fromRGBO(190, 222, 97, 1)),): Padding(
+      body: isloading?Center(child: CircularProgressIndicator(color:Colors.green),): Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -104,7 +102,7 @@ else{
                     children: [
                       Transform.rotate(
                          angle: 90 * (3.141592653589793 / 180),
-                        child: Icon(Icons.rectangle,size: 35,color: Color.fromRGBO(190, 222, 97, 1))),
+                        child: Icon(Icons.rectangle_outlined,size: 35,color:Colors.green)),
                       Expanded(child: Text(quotes[currentindex],style: TextStyle(color: Colors.white,shadows: [Shadow(color: Colors.black,blurRadius: 40)],overflow: TextOverflow.clip),)),
                     ],
                   ),
@@ -137,7 +135,7 @@ else{
                                   ? Border(
                                       bottom: BorderSide(
                                           width: 4,
-                                          color: Color.fromRGBO(190, 222, 97, 1)))
+                                          color:Colors.green))
                                   : Border(bottom: BorderSide.none)),
                           height: 40,
                           width: 60,
@@ -165,7 +163,7 @@ else{
                                   ? Border(
                                       bottom: BorderSide(
                                           width: 4,
-                                          color: Color.fromRGBO(190, 222, 97, 1)))
+                                          color:Colors.green))
                                   : Border(bottom: BorderSide.none)),
                           child: Center(
                               child: Text(
@@ -190,7 +188,7 @@ else{
                                   ? Border(
                                       bottom: BorderSide(
                                           width: 4,
-                                          color: Color.fromRGBO(190, 222, 97, 1)))
+                                          color:Colors.green))
                                   : Border(bottom: BorderSide.none)),
                           height: 40,
                           width: 60,
@@ -218,7 +216,7 @@ else{
                                   ? Border(
                                       bottom: BorderSide(
                                           width: 4,
-                                          color: Color.fromRGBO(190, 222, 97, 1)))
+                                          color:Colors.green))
                                   : Border(bottom: BorderSide.none)),
                           child: Center(
                               child: Text(
@@ -237,7 +235,7 @@ else{
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Showall()));
                 },
-                child: Text('Show All',style: TextStyle(color: Color.fromRGBO(190, 222, 97,1),fontWeight: FontWeight.w500),))],),
+                child: Text('Show All',style: TextStyle(color:Colors.green,fontWeight: FontWeight.w500),))],),
               
               SizedBox(height: 20,),
               SizedBox(
@@ -250,12 +248,17 @@ else{
                   itemBuilder: (context, index) {
                   return Container(
                  
-                    child: Recommendedartical(
-                      about: scientificName[index]["scientificName"].isNotEmpty? scientificName[index]["scientificName"]:"Not Found",
-            image: fauna[index]['media'][0]['identifier'].isNotEmpty 
-              ? fauna[index]['media'][0]['identifier']  // Extract first media image
-              : "https://static.thenounproject.com/png/1380510-200.png",  // Placeholder image
-          ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Bigarticles(selectedIndex: index)));
+                      },
+                      child: Recommendedartical(
+                        about: scientificName[index]["scientificName"].isNotEmpty? scientificName[index]["scientificName"]:"Not Found",
+                                  image: fauna[index]['media'][0]['identifier'].isNotEmpty 
+                                    ? fauna[index]['media'][0]['identifier']  // Extract first media image
+                                    : "https://static.thenounproject.com/png/1380510-200.png",  // Placeholder image
+                                ),
+                    ),
           );
                 },),
               ),
@@ -267,7 +270,7 @@ else{
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Showall()));
                 },
-                child: Text('Show All',style: TextStyle(color: Color.fromRGBO(190, 222, 97,1),fontWeight: FontWeight.w500),))],),
+                child: Text('Show All',style: TextStyle(color:Colors.green,fontWeight: FontWeight.w500),))],),
               
               SizedBox(height: 20,),
         SizedBox(
@@ -280,12 +283,18 @@ else{
                   itemBuilder: (context, index) {
                   return Container(
                  
-                    child: Recommendedartical2(
-                      about: scientificName[index]["scientificName"].isNotEmpty? scientificName[index]["scientificName"]:"Not Found",
-            image: fauna[index]['media'][0]['identifier'].isNotEmpty 
-              ? fauna[index]['media'][0]['identifier']  // Extract first media image
-              : "https://static.thenounproject.com/png/1380510-200.png",  // Placeholder image
-          ),
+                    child: GestureDetector(
+
+                       onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Bigarticles(selectedIndex: index)));
+                      },
+                      child: Recommendedartical2(
+                        about: scientificName[index]["scientificName"].isNotEmpty? scientificName[index]["scientificName"]:"Not Found",
+                                  image: fauna[index]['media'][0]['identifier'].isNotEmpty 
+                                    ? fauna[index]['media'][0]['identifier']  // Extract first media image
+                                    : "https://static.thenounproject.com/png/1380510-200.png",  // Placeholder image
+                                ),
+                    ),
           );
                 },),
               ),

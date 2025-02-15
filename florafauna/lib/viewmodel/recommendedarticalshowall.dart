@@ -9,7 +9,7 @@ final String? about;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: Container(
         height:200,
         width: 170,
@@ -32,7 +32,7 @@ final String? about;
             SizedBox(height: 20,),
 
             Container(height: 40,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color:  Color.fromRGBO(190, 222, 97, 1)),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.green),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

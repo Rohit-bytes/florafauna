@@ -21,15 +21,19 @@ final String? about;
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: Container(
-                  color: const Color.fromARGB(147, 158, 158, 158),
-                  height: 120,
-                  width: double.infinity,
-                  child: Image.network(image.toString(),fit: BoxFit.cover,))),
+                child: Opacity(
+
+                  opacity: 1.0,
+                  child: Container(
+                    color: const Color.fromARGB(147, 158, 158, 158),
+                    height: 120,
+                    width: double.infinity,
+                    child: Image.network(image.toString(),fit: BoxFit.cover,)),
+                )),
            SizedBox(height: 10,),
             Text(about.toString(),style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,overflow: TextOverflow.clip,),),
             SizedBox(height: 20,),
-
+      
             Row(children: [Icon(Icons.menu,color: Colors.white,),
             SizedBox(width: 5,),
             Text("READ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)],),          ],

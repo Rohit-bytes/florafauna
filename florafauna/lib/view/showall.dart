@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:florafauna/view/bigarticles.dart';
 import 'package:florafauna/viewmodel/recommendedartical.dart';
 import 'package:florafauna/viewmodel/recommendedarticalshowall.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +61,7 @@ else{
     return Scaffold(
       backgroundColor: Colors.black,
       appBar:  AppBar(
+        title: Text('Articles',style: TextStyle(color: Colors.white,),),
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         leading: GestureDetector(
@@ -71,7 +73,7 @@ else{
       
       
       ),
-      body:isloading?Center(child: CircularProgressIndicator(color: Color.fromRGBO(190, 222, 97, 1)),): SizedBox(
+      body:isloading?Center(child: CircularProgressIndicator(color:Colors.green),): SizedBox(
                 height: double.infinity,
                 width: double.infinity,
                 
@@ -83,12 +85,17 @@ else{
                   return Container(
                  height: 400,
                 
-                    child: Recommendedarticalshowall(
-                      about: scientificName[index]["scientificName"].isNotEmpty? scientificName[index]["scientificName"]:"Not Found",
-            image: fauna[index]['media'][0]['identifier'].isNotEmpty 
-              ? fauna[index]['media'][0]['identifier']  // Extract first media image
-              : "https://static.thenounproject.com/png/1380510-200.png",  // Placeholder image
-          ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Bigarticles(selectedIndex: index)));
+                      },
+                      child: Recommendedarticalshowall(
+                        about: scientificName[index]["scientificName"].isNotEmpty? scientificName[index]["scientificName"]:"Not Found",
+                                  image: fauna[index]['media'][0]['identifier'].isNotEmpty 
+                                    ? fauna[index]['media'][0]['identifier']  // Extract first media image
+                                    : "https://static.thenounproject.com/png/1380510-200.png",  // Placeholder image
+                                ),
+                    ),
           );
                 },),
               )
