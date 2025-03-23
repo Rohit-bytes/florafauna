@@ -28,7 +28,7 @@ List scientificName=[];
   }
 bool isloading=true;
    fetchdata() async{
-final response = await http.get(Uri.parse('https://api.gbif.org/v1/occurrence/search?country=GB&country=IE&country=IM'));
+final response = await http.get(Uri.parse('https://api.gbif.org/v1/occurrence/search?taxonKey=1&mediaType=StillImage&limit=300'));
 try {
   if(response.statusCode==200)
 

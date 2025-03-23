@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:florafauna/view/bigarticles.dart';
+import 'package:florafauna/view/bigarticles2.dart';
 import 'package:florafauna/view/showall.dart';
+import 'package:florafauna/view/showallflora.dart';
 import 'package:florafauna/viewmodel/recommendedartical.dart';
 import 'package:florafauna/viewmodel/recommendedartical2.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +15,47 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+//explore more
+
+List<dynamic> flora=[]; 
+List scientificNameflora=[];
+bool isloading=true;
+
+   fetchfloradata() async{
+final response = await http.get(Uri.parse('https://api.gbif.org/v1/occurrence/search?taxonKey=6&mediaType=StillImage&limit=300'));
+try {
+  if(response.statusCode==200)
+
+
+{
+ final responsedata=json.decode(response.body);
+setState(() {
+  flora = responsedata["results"];
+  scientificNameflora = responsedata["results"];
+  isloading=false;
+ 
+});
+  
+print(response.body);
+
+
+}
+else{
+    print('no data found');
+}
+} catch (e) {
+  print(e);
+}
+
+  }
+ 
+//recommended article
 List<dynamic> fauna=[]; 
 List scientificName=[];
-bool isloading=true;
+
    fetchdata() async{
-final response = await http.get(Uri.parse('https://api.gbif.org/v1/occurrence/search?country=GB&country=IE&country=IM'));
+final response = await http.get(Uri.parse('https://api.gbif.org/v1/occurrence/search?taxonKey=1&mediaType=StillImage&limit=300'));
 try {
   if(response.statusCode==200)
 
@@ -43,6 +81,8 @@ else{
 }
 
   }
+ 
+ 
   List<String> image = [
     ('https://img.freepik.com/free-photo/closeup-chital-mudumalai-national-park-india_181624-39465.jpg?ga=GA1.1.78227529.1730639370&semt=ais_hybrid'),
 ('https://images.pexels.com/photos/142497/pexels-photo-142497.jpeg?cs=srgb&dl=pexels-mali-142497.jpg&fm=jpg'),
@@ -62,6 +102,7 @@ else{
     super.initState();
     image;
     fetchdata();
+    fetchfloradata();
     
   }
 
@@ -265,10 +306,10 @@ else{
               SizedBox(height: 20,),
                   Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [Text('Explore More',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                children: [Text('Flora Species',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
               GestureDetector(
                 onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Showall()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Showallflora()));
                 },
                 child: Text('Show All',style: TextStyle(color:Colors.green,fontWeight: FontWeight.w500),))],),
               
@@ -279,21 +320,26 @@ else{
                 
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
-                  itemCount: fauna.length,
+                  itemCount: flora.length,
                   itemBuilder: (context, index) {
+                     final item = flora[index];
+      final scientificName = item["scientificName"] ?? "Not Found";
+      final media = item['media'] ?? [];
+      final image = media.isNotEmpty && media[0]['identifier'] != null
+          ? media[0]['identifier']
+          : "https://static.thenounproject.com/png/1380510-200.png"; // Placeholder image
+
                   return Container(
                  
                     child: GestureDetector(
 
                        onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Bigarticles(selectedIndex: index)));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Bigarticlesflora(selectedIndex: index)));
                       },
                       child: Recommendedartical2(
-                        about: scientificName[index]["scientificName"].isNotEmpty? scientificName[index]["scientificName"]:"Not Found",
-                                  image: fauna[index]['media'][0]['identifier'].isNotEmpty 
-                                    ? fauna[index]['media'][0]['identifier']  // Extract first media image
-                                    : "https://static.thenounproject.com/png/1380510-200.png",  // Placeholder image
-                                ),
+                        image: image,
+                        about: scientificName,
+                        ),
                     ),
           );
                 },),

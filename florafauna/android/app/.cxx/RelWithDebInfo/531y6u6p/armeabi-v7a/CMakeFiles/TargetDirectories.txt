@@ -1,0 +1,2 @@
+A:/flutter work/florafauna/florafauna/android/app/.cxx/RelWithDebInfo/531y6u6p/armeabi-v7a/CMakeFiles/edit_cache.dir
+A:/flutter work/florafauna/florafauna/android/app/.cxx/RelWithDebInfo/531y6u6p/armeabi-v7a/CMakeFiles/rebuild_cache.dir

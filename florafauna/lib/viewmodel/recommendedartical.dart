@@ -31,7 +31,7 @@ final String? about;
                     child: Image.network(image.toString(),fit: BoxFit.cover,)),
                 )),
            SizedBox(height: 10,),
-            Text(about.toString(),style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,overflow: TextOverflow.clip,),),
+            Text(about.toString(),maxLines: 2,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,overflow: TextOverflow.ellipsis,),),
             SizedBox(height: 20,),
       
             Row(children: [Icon(Icons.menu,color: Colors.white,),

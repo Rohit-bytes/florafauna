@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "680105274814",
+    "project_id": "florafauna-8ff6a",
+    "storage_bucket": "florafauna-8ff6a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680105274814:android:1de03f6039c2d61cb55def",
+        "android_client_info": {
+          "package_name": "com.example.florafauna"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxF1ffu7xN4BpE71KeeCLTwLBr1RZzsgA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

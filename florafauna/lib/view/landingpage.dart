@@ -1,4 +1,5 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:florafauna/auth/signin.dart';
 import 'package:florafauna/view/donationpage.dart';
 import 'package:florafauna/view/home.dart';
@@ -14,6 +15,9 @@ class Landingpage extends StatefulWidget {
 }
 
 class _LandingpageState extends State<Landingpage> {
+bool isLoggedIn = FirebaseAuth.instance.currentUser != null;
+
+
   double _opacity = 1.0;
   int currentIndex = 0;
 
@@ -30,18 +34,14 @@ class _LandingpageState extends State<Landingpage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(toolbarHeight: 50,
+      automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: const Icon(EvaIcons.arrowCircleLeft, color: Colors.white),
-        ),
+       
         title:
             Text(titles[currentIndex], style: TextStyle(color: Colors.white)),
         actions: [
-          Icon(
+       isLoggedIn?  Container():   Icon(
             Icons.circle,
             color: Colors.white,
             size: 8,
@@ -49,7 +49,7 @@ class _LandingpageState extends State<Landingpage> {
           SizedBox(
             width: 10,
           ),
-          GestureDetector(
+       isLoggedIn?  Container(): GestureDetector(
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(builder: (_)=>const Signin()));
             },
