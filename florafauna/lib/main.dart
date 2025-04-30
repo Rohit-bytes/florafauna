@@ -1,7 +1,4 @@
-import 'package:florafauna/auth/Signup.dart';
-import 'package:florafauna/auth/signin.dart';
 import 'package:florafauna/providers/profile.dart';
-import 'package:florafauna/view/home.dart';
 import 'package:florafauna/view/homepage.dart';
 import 'package:florafauna/view/landingpage.dart';
 import 'package:flutter/material.dart';

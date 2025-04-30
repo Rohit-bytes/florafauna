@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:florafauna/model/usermodel.dart';
 import 'package:florafauna/providers/profile.dart';
 import 'package:flutter/material.dart';
@@ -50,22 +48,50 @@ class Profilepage extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 ProfileInfoTextField(label: "Name", controller: value.name),
-                ProfileInfoTextField(label: "Email", controller: value.email),
                 ProfileInfoTextField(label: "Phone", controller: value.number),
                 SizedBox(height: 20),
-                ElevatedButton(
-                  style: ButtonStyle().copyWith(backgroundColor: WidgetStatePropertyAll(Colors.green)),
-                  onPressed: () {
-                    Usermodel usermodel = Usermodel(uid: FirebaseAuth.instance.currentUser!.uid,
-                    email: value.email.text,
-                    phone: value.number.text,
-                    username: value.name.text,
-                    
-                    );
-                    FirebaseFirestore.instance.collection("User").doc(usermodel.uid).set(usermodel.tojson(),SetOptions(merge: true));
-                  }, 
-                  child: Text("Update Changes",style: TextStyle(color: Colors.white),),
-                ),
+              ElevatedButton(
+  style: ButtonStyle(
+    backgroundColor: MaterialStateProperty.all(Colors.green),
+  ),
+  onPressed: () {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      // Handle the case where no user is signed in
+      print("No user is currently signed in.");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("No user is signed in. Please log in first.")),
+      );
+      return;
+    }
+
+    Usermodel usermodel = Usermodel(
+      uid: currentUser.uid,
+      phone: value.number.text,
+      username: value.name.text,
+    );
+
+    FirebaseFirestore.instance
+        .collection("User")
+        .doc(usermodel.uid)
+        .set(usermodel.tojson(), SetOptions(merge: true))
+        .then((_) {
+      print("User data updated successfully.");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Profile updated successfully.")),
+      );
+    }).catchError((error) {
+      print("Error updating user data: $error");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to update profile. Please try again.")),
+      );
+    });
+  },
+  child: Text(
+    "Update Changes",
+    style: TextStyle(color: Colors.white),
+  ),
+),
               ],
             ),
           ),

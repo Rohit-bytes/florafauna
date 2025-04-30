@@ -8,6 +8,7 @@ class Profileprovider extends ChangeNotifier {
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController number = TextEditingController();
+  String firstletter ="";
    File? _imageFile;
   final ImagePicker _picker = ImagePicker();
 
