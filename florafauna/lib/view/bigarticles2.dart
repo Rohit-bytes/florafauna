@@ -33,14 +33,37 @@ class _BigarticlesfloraState extends State<Bigarticlesflora> {
     Random random = Random();
     return randomStrings[random.nextInt(randomStrings.length)];
   }
-  Future<void> _launchURL() async {
-    final Uri uri = Uri.parse(flora[widget.selectedIndex]['references']);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
-    } else {
-      throw "Could not launch";
-    }
+  
+  
+Future<void> _launchURL() async {
+  // final String? url = fauna[widget.selectedIndex]['references'];
+  // final String? url = "https://www.gbif.org/dataset/${fauna[widget.selectedIndex]['datasetKey']}";
+  final String? url = "https://www.gbif.org/occurrence/${flora[widget.selectedIndex]['key']}";
+  print(url);
+  print(widget.selectedIndex);
+
+  if (url == null || url.isEmpty) {
+    _showErrorSnackbar('URL is empty or missing');
+    return;
   }
+
+  final Uri uri = Uri.parse(url);
+
+  try {
+    if (!await launchUrl(uri, mode: LaunchMode.inAppBrowserView)) {
+      _showErrorSnackbar('Could not launch the link');
+    }
+  } catch (e) {
+    _showErrorSnackbar('Error launching the link');
+  }
+}
+
+void _showErrorSnackbar(String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message)),
+  );
+}
+
 
   bool isLoading = true;
 

@@ -2,6 +2,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:florafauna/view/landingpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -20,7 +21,7 @@ class _HomepageState extends State<Homepage> {
       
        backgroundColor: Colors.transparent, // Makes AppBar transparent
       elevation: 0, // Removes AppBar shadow
-        title: const Text("Hello, Rohit",style: TextStyle(color: Colors.white),),
+        title: const Text("Hello",style: TextStyle(color: Colors.white),),
         centerTitle: true,
         leading: Builder(
           builder: (context) => IconButton(
@@ -89,7 +90,9 @@ class _HomepageState extends State<Homepage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: (){
+                    onTap: ()async{
+                      SharedPreferences pref =await SharedPreferences.getInstance();
+                      await pref.setBool("hasSeenGetStarted",true);
                       Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Landingpage()));
                     },
                     child: Container(

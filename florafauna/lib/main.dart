@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: hasSeenGetStarted ? const Homepage() : const Landingpage(),
+      home: hasSeenGetStarted ? const Landingpage():const Homepage(), 
     );
   }
 }

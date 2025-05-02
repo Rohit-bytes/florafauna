@@ -99,21 +99,21 @@ bool isLoggedIn = FirebaseAuth.instance.currentUser != null;
           SizedBox(
             width: 40,
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white, width: 2),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: const CircleAvatar(
-                backgroundColor: Colors.black,
-                backgroundImage: NetworkImage(
-                  'https://img.freepik.com/premium-photo/smiling-businessman-formal-wear-using-tablet-while-standing-rooftop_232070-1360.jpg',
-                ),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 10.0),
+          //   child: Container(
+          //     decoration: BoxDecoration(
+          //       border: Border.all(color: Colors.white, width: 2),
+          //       borderRadius: BorderRadius.circular(50),
+          //     ),
+          //     child: const CircleAvatar(
+          //       backgroundColor: Colors.black,
+          //       backgroundImage: NetworkImage(
+          //         'https://img.freepik.com/premium-photo/smiling-businessman-formal-wear-using-tablet-while-standing-rooftop_232070-1360.jpg',
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
       body: pages[currentIndex],

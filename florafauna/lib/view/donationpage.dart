@@ -22,7 +22,7 @@ void initState() {
   final Map<String, String> images1 = {
     "WTI": "https://www.wti.org.in/wp-content/uploads/2021/08/WTI_Logo_3.png",
     "WWF": "https://join.wwfindia.org/donate/images/logo.png",
-    "wlsos": "https://wildlifesos.org/wp-content/uploads/2020/11/wsos-Bear-Logo-border-85x130-1.png",
+    "wlsos": "https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1971/Bear_Logo_Avatar_512x512.png?v=1613052055000",
   };
 
   final List<String> donationLinks1 = [
@@ -40,14 +40,28 @@ void initState() {
     "https://www.globalgiving.org/dy/v2/checkout/billing/",
     "https://saveplants.org/donate/",
   ];
-  Future<void> _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
-    } else {
-      throw "Could not launch $url";
-    }
+Future<void> _launchURL(String url) async {
+  if (url.isEmpty) {
+    print('Empty URL');
+    return;
   }
+  final Uri uri = Uri.parse(url);
+
+  try {
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      _showErrorSnackbar('Could not launch the link');
+    }
+  } catch (e) {
+    _showErrorSnackbar('Error launching the link');
+  }
+}
+
+void _showErrorSnackbar(String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message)),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {

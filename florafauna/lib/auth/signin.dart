@@ -114,8 +114,9 @@ class _SigninState extends State<Signin> {
                           backgroundColor: WidgetStateProperty.all(Colors.transparent),
                           minimumSize: WidgetStateProperty.all(Size(double.infinity, 55)),
                         ),
-                        onPressed: () {
-                          signinfunction(emailcontroller.text.trim(), passwordcontroller.text.trim());
+                        onPressed: () async{
+                          await signinfunction(emailcontroller.text.trim(), passwordcontroller.text.trim());
+                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => Landingpage()));
                         },
                         child: Text(
                           'Sign In',

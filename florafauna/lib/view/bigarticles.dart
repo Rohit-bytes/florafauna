@@ -30,14 +30,34 @@ class _BigarticlesState extends State<Bigarticles> {
     return paragraphs[random.nextInt(paragraphs.length)];
   }
 
-  Future<void> _launchURL() async {
-    final Uri uri = Uri.parse(fauna[widget.selectedIndex]['references']);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
-    } else {
-      throw "Could not launch";
-    }
+Future<void> _launchURL() async {
+  // final String? url = fauna[widget.selectedIndex]['references'];
+  // final String? url = "https://www.gbif.org/dataset/${fauna[widget.selectedIndex]['datasetKey']}";
+  final String? url = "https://www.gbif.org/occurrence/${fauna[widget.selectedIndex]['key']}";
+  print(url);
+  print(widget.selectedIndex);
+
+  if (url == null || url.isEmpty) {
+    _showErrorSnackbar('URL is empty or missing');
+    return;
   }
+
+  final Uri uri = Uri.parse(url);
+
+  try {
+    if (!await launchUrl(uri, mode: LaunchMode.inAppBrowserView)) {
+      _showErrorSnackbar('Could not launch the link');
+    }
+  } catch (e) {
+    _showErrorSnackbar('Error launching the link');
+  }
+}
+
+void _showErrorSnackbar(String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message)),
+  );
+}
 
   bool isloading = true;
 
