@@ -21,11 +21,13 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  bool isLoading = false;
   bool usercreated = false;
   var uuid = const Uuid();
   final ImagePicker _imagepicker = ImagePicker();
   File? ima;
 
+  // ValueNotifier for the first letter
   ValueNotifier<String> firstLetter = ValueNotifier<String>('');
 
   void Imagepicker() async {
@@ -65,11 +67,10 @@ class _SignupState extends State<Signup> {
   Future<void> addusername() async {
     try {
       Usermodel user = Usermodel(
-        uid: uuid.v4(),
-        email: emailcontroller.text.trim(),
+        uid: FirebaseAuth.instance.currentUser!.uid,
         username: namecontroller.text.trim(),
       );
-
+print("User model: ${user.tojson()}");
       await FirebaseFirestore.instance.collection('User').add(user.tojson());
     } catch (e) {
       print(e);
@@ -116,172 +117,191 @@ class _SignupState extends State<Signup> {
         ),
       ),
       backgroundColor: Colors.black,
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SizedBox(height: 100),
-                      CupertinoButton(
-                        onPressed: () {},
-                        child: ValueListenableBuilder<String>(
-                          valueListenable: firstLetter,
-                          builder: (context, first, child) {
-                            return Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  border:
-                                      Border.all(width: 2, color: Colors.white),
-                                  color: Colors.greenAccent,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: first.isEmpty
-                                    ? Icon(
-                                        Icons.person,
-                                        size: 30,
-                                        color: Colors.black,
-                                      )
-                                    : Center(
-                                        child: Text(
-                                          first,
-                                          style: TextStyle(
-                                            fontSize: 40,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 100),
+                        CupertinoButton(
+                          onPressed: () {},
+                          child: ValueListenableBuilder<String>(
+                            valueListenable: firstLetter,
+                            builder: (context, first, child) {
+                              return Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(width: 2, color: Colors.white),
+                                    color: Colors.greenAccent,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: first.isEmpty
+                                      ? Icon(
+                                          Icons.person,
+                                          size: 30,
+                                          color: Colors.black,
+                                        )
+                                      : Center(
+                                          child: Text(
+                                            first,
+                                            style: TextStyle(
+                                              fontSize: 40,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                      ));
+                                        ));
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        TextField(
+                          controller: namecontroller,
+                          autocorrect: true,
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            hintText: "Enter Your Name",
+                            hintStyle: TextStyle(color: Colors.black),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              // Update the first letter for the circle icon
+                              firstLetter.value = value[0].toUpperCase();
+                            } else {
+                              firstLetter.value = '';
+                            }
                           },
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      TextField(
-                        controller: namecontroller,
-                        autocorrect: true,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          hintText: "Enter Your Name",
-                          hintStyle: TextStyle(color: Colors.black),
-                          border: OutlineInputBorder(
+                        SizedBox(height: 10),
+                        TextField(
+                          controller: emailcontroller,
+                          autocorrect: true,
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            hintText: "Enter Your Email",
+                            hintStyle: TextStyle(color: Colors.black),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        TextField(
+                          controller: passwordcontroller,
+                          autocorrect: true,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            hintText: "Enter Your Password",
+                            hintStyle: TextStyle(color: Colors.black),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Container(
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none,
+                            gradient: LinearGradient(
+                              colors: [Colors.green, Colors.greenAccent],
+                            ),
                           ),
-                        ),
-                        onChanged: (value) {
-                          if (value.isNotEmpty) {
-                            String letter =
-                                Provider.of<Profileprovider>(context)
-                                    .firstletter;
-                            firstLetter.value = value[0].toUpperCase();
-                            letter = firstLetter.value;
-                            print('first letter in provider, ${letter}');
-                          } else {
-                            firstLetter.value = '';
-                          }
-                        },
-                      ),
-                      SizedBox(height: 10),
-                      TextField(
-                        controller: emailcontroller,
-                        autocorrect: true,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          hintText: "Enter Your Email",
-                          hintStyle: TextStyle(color: Colors.black),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      TextField(
-                        controller: passwordcontroller,
-                        autocorrect: true,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          hintText: "Enter Your Password",
-                          hintStyle: TextStyle(color: Colors.black),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          gradient: LinearGradient(
-                            colors: [Colors.green, Colors.greenAccent],
-                          ),
-                        ),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            shape: WidgetStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              minimumSize: MaterialStateProperty.all(
+                                Size(double.infinity, 55),
                               ),
                             ),
-                            backgroundColor:
-                                WidgetStateProperty.all(Colors.transparent),
-                            minimumSize: WidgetStateProperty.all(
-                              Size(double.infinity, 55),
+                            onPressed: () async {
+                              
+                              setState(() {
+                                isLoading = true;
+                              });
+                              await signup(
+                                emailcontroller.text.trim(),
+                                passwordcontroller.text.trim(),
+                              );
+                              setState(() {
+                                isLoading = false;
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                isLoading
+                                    ? Container(
+                                        height: 10,
+                                        width: 10,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : SizedBox.shrink(),
+                                SizedBox(width: 5),
+                                Text(
+                                  'Sign up',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ],
                             ),
                           ),
-                          onPressed: () async {
-                            // await uploadImageToFirebase();
-
-                            await signup(
-                              emailcontroller.text.trim(),
-                              passwordcontroller.text.trim(),
-                            );
-                          },
-                          child: Text(
-                            'Sign up',
-                            style: TextStyle(color: Colors.black),
-                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20.0, top: 20),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Already have an Account?',
-                          style: TextStyle(color: Colors.white)),
-                      SizedBox(width: 5),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => Signin()));
-                        },
-                        child: Text('Sign In',
-                            style: TextStyle(color: Colors.greenAccent)),
-                      ),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0, top: 20),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Already have an Account?',
+                            style: TextStyle(color: Colors.white)),
+                        SizedBox(width: 5),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => Signin()));
+                          },
+                          child: Text('Sign In',
+                              style: TextStyle(color: Colors.greenAccent)),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-            ],
+                SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),

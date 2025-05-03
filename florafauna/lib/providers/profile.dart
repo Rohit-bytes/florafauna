@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -29,4 +30,5 @@ class Profileprovider extends ChangeNotifier {
     _imageFile = null;
     notifyListeners();
   }
+  bool isLoggedIn = FirebaseAuth.instance.currentUser != null;
 }
